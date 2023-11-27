@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'FabTabs.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -14,7 +12,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _nomController = TextEditingController();
   TextEditingController _prenomController = TextEditingController();
-  TextEditingController _professionController = TextEditingController();
+  String? _selectedProfession;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
@@ -25,24 +23,21 @@ class _SignUpPageState extends State<SignUpPage> {
 
   String? _nomError;
   String? _prenomError;
-  String? _professionError;
   String? _emailError;
   String? _passwordError;
   String? _confirmPasswordError;
 
-  // static const String apiUrl = 'http://localhost:3000/api/auth/signup';
+  List<String> _professions = ['Pharmacien', 'Etudiant'];
 
   Future<void> _performSignUp() async {
     final nom = _nomController.text;
     final prenom = _prenomController.text;
-    final profession = _professionController.text;
     final email = _emailController.text;
     final password = _passwordController.text;
 
     setState(() {
       _nomError = _validateField(nom, 'Nom');
       _prenomError = _validateField(prenom, 'Prénom');
-      _professionError = _validateField(profession, 'Profession');
       _emailError = _validateField(email, 'Email');
       _passwordError = _validateField(password, 'Mot de passe');
       _confirmPasswordError =
@@ -52,43 +47,14 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_isTermsAndConditionsChecked &&
         _nomError == null &&
         _prenomError == null &&
-        _professionError == null &&
         _emailError == null &&
         _passwordError == null &&
         _confirmPasswordError == null) {
-      try {
-        // Simulate a successful signup
-        // Uncomment this section when you integrate the actual API
-        /*final response = await http.post(
-          Uri.parse(apiUrl),
-          body: json.encode({
-            'nom': nom,
-            'prenom': prenom,
-            'profession': profession,
-            'email': email,
-            'password': password,
-          }),
-          headers: {'Content-Type': 'application/json'},
-        );
-
-        if (response.statusCode == 201) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Fabtabs(selectedIndex: 0)),
-          );
-        } else if (response.statusCode == 400) {
-          // Handle validation error from the server
-        } else {
-          // Handle other status codes
-        }*/
-        // Navigate to the next screen (comment this line if using actual API)
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Fabtabs(selectedIndex: 0)),
-        );
-      } catch (e) {
-        print('Error connecting to API: $e');
-      }
+      // Simulate a successful signup
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Fabtabs(selectedIndex: 0)),
+      );
     }
   }
 
@@ -157,15 +123,27 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
-                  controller: _professionController,
-                  style: const TextStyle(fontSize: 16),
+                DropdownButtonFormField<String>(
+                  value: _selectedProfession,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedProfession = newValue;
+                    });
+                  },
                   decoration: InputDecoration(
                     labelText: 'Profession',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                    errorText: _professionError,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                   ),
+                  items: _professions.map((profession) {
+                    return DropdownMenuItem<String>(
+                      value: profession,
+                      child: Text(profession),
+                    );
+                  }).toList(),
                 ),
+
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _emailController,

@@ -34,6 +34,40 @@ class _HomeScreenState extends State<HomeScreen> {
     'https://cdn.shopify.com/s/files/1/0590/5858/5777/products/CreationofParadisePitreMaster25pc2021_400x.jpg?v=1641066803',
     'https://i1.sndcdn.com/artworks-lF5j1ZSj0RJxSOmF-WEzSpg-t500x500.jpg',
   ];
+  Widget _buildEventSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                onPrimary: Colors.white,
+              ),
+              onPressed: () {
+                // Ajoutez ici le code à exécuter lorsque le bouton est pressé
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  ' Lancement Nouveau quiz  le 2 janvier',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        // Ajoutez votre contenu d'événement ici
+      ],
+    );
+  }
+
+
 
   Widget _buildListItem(String title, String imageUrl) {
     return
@@ -144,11 +178,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
           IconButton(
             onPressed: () {
+              // Handle notification icon click
+            },
+            icon: const Icon(Icons.notifications),
+            color: Colors.grey,
+          ),
+          IconButton(
+            onPressed: () {
               // Handle filter icon click (i didn't know how)
             },
             icon: const Icon(Icons.filter_list),
             color: Colors.black,
           ),
+
         ],
         centerTitle: true,
       ),
@@ -159,6 +201,27 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _buildEventSection(),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Recommandés pour vous',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: topPicksImageUrls.length,
+                itemBuilder: (context, index) {
+                  return _buildListItem('Quiz $index', topPicksImageUrls[index]);
+                },
+              ),
+            ),
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -204,26 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Top Picks',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: topPicksImageUrls.length,
-                itemBuilder: (context, index) {
-                  return _buildListItem('Quiz $index', topPicksImageUrls[index]);
-                },
-              ),
-            ),
+
           ],
         ),
       ),
