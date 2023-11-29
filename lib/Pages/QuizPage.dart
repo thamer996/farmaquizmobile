@@ -24,13 +24,12 @@ class _QuizPageState extends State<QuizPage> {
       'options': ['Vitamin A', 'Vitamin C', 'Vitamin D', 'Vitamin E'],
       'correctAnswer': 'Vitamin D',
       'additionalInfo': 'Vitamin D is not just a vitamin, but a prohormone that affects many organs and functions in the body, from bones to muscles to immunity.'
-
     },
     {
       'question': 'Which of the following is a condition characterized by high blood sugar?',
       'options': ['Hypertension', 'Hypoglycemia', 'Diabetes', 'Anemia'],
       'correctAnswer': 'Diabetes',
-      'additionalInfo': 'Diabetes mellitus refers to a group of diseases that affect how the body uses blood sugar (glucose). Glucose is an important source of energy for the cells that make up the muscles and tissues. It \'s also the brain\'s main source of fuel. The main cause of diabetes varies by type. '
+      'additionalInfo': 'Diabetes mellitus refers to a group of diseases that affect how the body uses blood sugar (glucose). Glucose is an important source of energy for the cells that make up the muscles and tissues. It \'s also the brain\'s main source of fuel. The main cause of diabetes varies by type.'
     },
     {
       'question': 'What is the medical term for inflammation of the joints?',
@@ -44,7 +43,6 @@ class _QuizPageState extends State<QuizPage> {
       'correctAnswer': 'Pancreas',
       'additionalInfo': 'A glandular organ located in the abdomen. It makes pancreatic juices, which contain enzymes that aid in digestion, and it produces several hormones, including insulin. The pancreas is surrounded by the stomach, intestines, and other organs.'
     },
-
   ];
 
   String? _userAnswer;
@@ -63,7 +61,7 @@ class _QuizPageState extends State<QuizPage> {
 
         return DraggableScrollableSheet(
           expand: false,
-          initialChildSize: 0.5, // You can adjust this value as needed
+          initialChildSize: 0.5,
           minChildSize: 0.3,
           maxChildSize: 0.9,
           builder: (BuildContext context, ScrollController scrollController) {
@@ -130,10 +128,6 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-
-
-
-
   void _checkAnswer(String selectedOption) {
     if (!_showResult) {
       _showQuestionInfo(selectedOption);
@@ -149,7 +143,6 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
-
   void _nextQuestion() {
     setState(() {
       if (_currentQuestionIndex + 1 < _quizData.length) {
@@ -157,7 +150,6 @@ class _QuizPageState extends State<QuizPage> {
         _userAnswer = null;
         _showResult = false;
       } else {
-        // Quiz completed, navigate to the result screen
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -171,108 +163,110 @@ class _QuizPageState extends State<QuizPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
         backgroundColor: const Color(0xff03919B),
-        title: Text('Quiz ${_currentQuestionIndex + 1}/${_quizData.length}'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    title: Text('Quiz ${_currentQuestionIndex + 1}/${_quizData.length}'),
+    centerTitle: true,
+    leading: IconButton(
+    icon: const Icon(Icons.arrow_back),
+    onPressed: () {
+    Navigator.pop(context);
+    },
+    ),
+    ),
+    body: Container(
+    color: Colors.blue[900],
+    child: Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children:
+    [
+      Expanded(
+        flex: 1,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Center(
+            child: _showResult
+                ? Text(
+              _userAnswer == _quizData[_currentQuestionIndex]['correctAnswer']
+                  ? 'Bien joué!'
+                  : 'Incorrect!',
+              style: TextStyle(
+                  color: _userAnswer == _quizData[_currentQuestionIndex]['correctAnswer']
+                      ? Colors.green
+                      : Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20),
+              textAlign: TextAlign.center,
+            )
+                : Text(
+              _quizData[_currentQuestionIndex]['question'],
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      const SizedBox(height: 20),
+      Expanded(
+        flex: 2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
+          children: List.generate(
+            _quizData[_currentQuestionIndex]['options'].length,
+                (index) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ElevatedButton(
+                onPressed: () => _checkAnswer(_quizData[_currentQuestionIndex]['options'][index]),
+                style: ElevatedButton.styleFrom(
+                  primary: _userAnswer == _quizData[_currentQuestionIndex]['options'][index]
+                      ? (_quizData[_currentQuestionIndex]['options'][index] ==
+                      _quizData[_currentQuestionIndex]['correctAnswer']
+                      ? Colors.green
+                      : Colors.red)
+                      : Colors.white,
+                  onPrimary: Colors.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  elevation: 2,
                 ),
-                child: Center(
-                  child: _showResult
-                      ? Text(
-                    _userAnswer == _quizData[_currentQuestionIndex]['correctAnswer']
-                        ? 'Bien joué!'
-                        : 'Incorrect!',
-                    style: TextStyle(
-                        color: _userAnswer == _quizData[_currentQuestionIndex]['correctAnswer']
-                            ? Colors.green
-                            : Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                    textAlign: TextAlign.center,
-                  )
-                      : Text(
-                    _quizData[_currentQuestionIndex]['question'],
-                    style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                child: Text(_quizData[_currentQuestionIndex]['options'][index],
+                    style: const TextStyle(color: Colors.black, fontSize: 18)),
               ),
             ),
-            const SizedBox(height: 20),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: List.generate(
-                  _quizData[_currentQuestionIndex]['options'].length,
-                      (index) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: ElevatedButton(
-                      onPressed: () =>
-                          _checkAnswer(_quizData[_currentQuestionIndex]['options'][index]),
-                      style: ElevatedButton.styleFrom(
-                        primary: _userAnswer ==
-                            _quizData[_currentQuestionIndex]['options'][index]
-                            ? (_quizData[_currentQuestionIndex]['options'][index] ==
-                            _quizData[_currentQuestionIndex]['correctAnswer']
-                            ? Colors.green
-                            : Colors.red)
-                            : Colors.white,
-                        onPrimary: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        elevation: 2,
-                      ),
-                      child: Text(_quizData[_currentQuestionIndex]['options'][index],
-                          style: const TextStyle(color: Colors.black, fontSize: 18)),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _userAnswer == null ? _nextQuestion : () => _nextQuestion(),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                elevation: 2,
-              ),
-              child: Text(_userAnswer == null ? 'Passer' : 'Suivant'),
-            ),
-          ],
+          ),
         ),
       ),
+      ElevatedButton(
+        onPressed: _userAnswer == null ? _nextQuestion : () => _nextQuestion(),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 2,
+        ),
+        child: Text(_userAnswer == null ? 'Passer' : 'Suivant'),
+      ),
+    ],
+    ),
+    ),
+    ),
     );
   }
 }

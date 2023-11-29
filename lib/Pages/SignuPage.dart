@@ -29,6 +29,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
   List<String> _professions = ['Pharmacien', 'Etudiant'];
 
+  String? _selectedDomaine;
+  List<String> _etudiantDomaines = ['1er', '2eme', '3eme','4eme','5eme'];
+  List<String> _pharmacienDomaines = ['industrie ', 'officine ', 'hôpital ','biologie','autre'];
+
   Future<void> _performSignUp() async {
     final nom = _nomController.text;
     final prenom = _prenomController.text;
@@ -128,6 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onChanged: (newValue) {
                     setState(() {
                       _selectedProfession = newValue;
+                      _selectedDomaine = null; // Reset the selected domaine when profession changes
                     });
                   },
                   decoration: InputDecoration(
@@ -143,7 +148,52 @@ class _SignUpPageState extends State<SignUpPage> {
                     );
                   }).toList(),
                 ),
-
+                if (_selectedProfession == 'Etudiant') ...[
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedDomaine,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedDomaine = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Année',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    items: _etudiantDomaines.map((domaine) {
+                      return DropdownMenuItem<String>(
+                        value: domaine,
+                        child: Text(domaine),
+                      );
+                    }).toList(),
+                  ),
+                ],
+                if (_selectedProfession == 'Pharmacien') ...[
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<String>(
+                    value: _selectedDomaine,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedDomaine = newValue;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Domaine',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    items: _pharmacienDomaines.map((domaine) {
+                      return DropdownMenuItem<String>(
+                        value: domaine,
+                        child: Text(domaine),
+                      );
+                    }).toList(),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _emailController,
