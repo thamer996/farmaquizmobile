@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'QuizPage.dart';
+import 'package:http/http.dart' as http;
 import 'component/Sidemenu.dart';
 
 class SelectQuizPage extends StatefulWidget {
@@ -8,52 +9,41 @@ class SelectQuizPage extends StatefulWidget {
 }
 
 class _SelectQuizPageState extends State<SelectQuizPage> {
-  final List<Map<String, dynamic>> quizCategories = [
-    {
-      'categoryName': 'Officine',
-      'categoryDescription': 'This category includes quizzes related to workshops and craftsmanship.',
-      'quizzes': [
-        'Quiz 1',
-        'Quiz 2',
-        'Quiz 3',
-      ],
-    },
-    {
-      'categoryName': 'industrie',
-      'categoryDescription': 'This category includes quizzes related to workshops and craftsmanship.',
-      'quizzes': [
-        'Quiz 1',
-        'Quiz 2',
-        'Quiz 3',
-      ],
-    },
-    {
-      'categoryName': 'hôpital',
-      'categoryDescription': 'This category includes quizzes related to workshops and craftsmanship.',
-      'quizzes': [
-        'Quiz 1',
-        'Quiz 2',
-        'Quiz 3',
-      ],
-    },
-    {
-      'categoryName': 'Biologie',
-      'categoryDescription': 'This category includes quizzes related to workshops and craftsmanship.',
-      'quizzes': [
-        'Quiz A',
-        'Quiz B',
-        'Quiz C',
-      ],
-    },
-    // Add more categories...
-  ];
-
+  List<Map<String, dynamic>> quizCategories = [];
   List<bool> categoryVisibility = [];
 
   @override
   void initState() {
     super.initState();
-    categoryVisibility = List.generate(quizCategories.length, (index) => false);
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:5000/api/Categories'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> categoriesData = json.decode(response.body);
+      final List<Map<String, dynamic>> categories = categoriesData.map((category) {
+        return {
+          'categoryId': category['categoryId'] ?? '',
+          'categoryName': category['nom'] ?? 'Default Category Name',
+          'categoryDescription': category['description'] ?? 'Default Description',
+          'quizzes': (category['quizzes'] as List<dynamic> ?? []).map((quiz) {
+            return {
+              'quizName': quiz['nom'] ?? 'Default Quiz Name',
+              'quizDescription': quiz['description'] ?? 'Default Quiz Description',
+            };
+          }).toList(),
+        };
+      }).toList();
+
+      setState(() {
+        quizCategories = categories;
+        categoryVisibility = List.generate(quizCategories.length, (index) => false);
+      });
+    } else {
+      throw Exception('Failed to load categories');
+    }
   }
 
   @override
@@ -62,11 +52,11 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
       drawer: Sidemenu(),
       appBar: AppBar(
         backgroundColor: const Color(0xff03919B),
-        title: const Text('Quizzes'),
+        title: const Text('Les Catégories'),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.blue[900], // Ajout de la couleur de fond bleue ici
+      backgroundColor: Colors.blue[900],
       body: ListView.builder(
         itemCount: quizCategories.length,
         itemBuilder: (context, categoryIndex) {
@@ -82,8 +72,7 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      categoryVisibility[categoryIndex] =
-                      !categoryVisibility[categoryIndex];
+                      categoryVisibility[categoryIndex] = !categoryVisibility[categoryIndex];
                     });
                   },
                   child: Container(
@@ -117,49 +106,49 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
                   ),
                 ),
               ),
-              Visibility(
-                visible: categoryVisibility[categoryIndex],
-                child: Column(
-                  children: List.generate(quizzes.length, (quizIndex) {
-                    final quizName = quizzes[quizIndex];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 9,
-                        horizontal: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.blueGrey,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          quizName,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+
+              // Display quizzes for the category
+              if (categoryVisibility[categoryIndex])
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: quizzes.map<Widget>((quiz) {
+                    final quizName = quiz['quizName'];
+                    final quizDescription = quiz['quizDescription'];
+
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.green, // You can customize the color
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const QuizPage(),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              quizName,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          );
-                        },
+                            const SizedBox(height: 8),
+                            Text(
+                              quizDescription,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
-                  }),
+                  }).toList(),
                 ),
-              ),
             ],
           );
         },

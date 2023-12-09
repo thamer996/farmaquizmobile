@@ -45,11 +45,13 @@ dependencies:
   image_picker: ^0.8.4
 
   http: ^0.13.3
-  mongo_dart: any
-
+  mongo_dart: 0.9.1
+  provider: ^6.1.1
+cached_network_image: ^3.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
