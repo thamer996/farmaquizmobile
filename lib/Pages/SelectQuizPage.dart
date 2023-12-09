@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'component/Sidemenu.dart';
+import 'QuizListPage.dart'; // Import your QuizListPage widget
 
 class SelectQuizPage extends StatefulWidget {
   @override
@@ -46,6 +47,18 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
     }
   }
 
+  void _navigateToQuizListPage(String categoryName, List<Map<String, dynamic>> quizzes) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuizListPage(
+          categoryName: categoryName,
+          quizzes: quizzes,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,9 +84,7 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      categoryVisibility[categoryIndex] = !categoryVisibility[categoryIndex];
-                    });
+                    _navigateToQuizListPage(categoryName, quizzes);
                   },
                   child: Container(
                     width: double.infinity,
@@ -106,49 +117,6 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
                   ),
                 ),
               ),
-
-              // Display quizzes for the category
-              if (categoryVisibility[categoryIndex])
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: quizzes.map<Widget>((quiz) {
-                    final quizName = quiz['quizName'];
-                    final quizDescription = quiz['quizDescription'];
-
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.green, // You can customize the color
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              quizName,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              quizDescription,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
             ],
           );
         },
