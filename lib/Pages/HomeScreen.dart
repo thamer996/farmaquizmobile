@@ -1,6 +1,6 @@
-import 'dart:ui'; // Import dart:ui to use Image.asset
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:app/Pages/LoginPage.dart';
+import 'package:http/http.dart' as http;
 import 'package:app/Pages/QuizPage.dart';
 import 'package:app/Pages/component/Sidemenu.dart';
 
@@ -13,71 +13,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _isSearchOpen = false;
+  List<Map<String, dynamic>> quizzes = [];
 
-  List<String> quizTendanceImagePaths = [
-    'lib/images/img.png',
-    'lib/images/img.png',
-    'lib/images/img.png',
-    'lib/images/img.png',// Replace with the path to your local image
-    // ... (remaining paths)
-  ];
-
-  List<String> NouveautesImagePaths = [
-    'lib/images/img.png',
-    'lib/images/img.png',
-    'lib/images/img.png',
-    'lib/images/img.png',// Replace with the path to your local image
-    // ... (remaining paths)
-  ];
-
-  List<String> topPicksImagePaths = [
-    'lib/images/img.png',
-    'lib/images/img.png',
-    'lib/images/img.png',
-    'lib/images/img.png',// Replace with the path to your local image
-    // ... (remaining paths)
-  ];
-
-  Widget _buildEventSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Expanded(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                onPrimary: Colors.white,
-              ),
-              onPressed: () {
-                // Ajoutez ici le code à exécuter lorsque le bouton est pressé
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  ' Lancement Nouveau quiz  le 2 janvier',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+  @override
+  void initState() {
+    super.initState();
+    _fetchQuizzes();
   }
 
-  Widget _buildListItem(String title, String imagePath) {
+  Future<void> _fetchQuizzes() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:5000/api/Quizzes/'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        quizzes = List<Map<String, dynamic>>.from(data);
+      });
+    } else {
+      throw Exception('Failed to load quizzes');
+    }
+  }
+
+  Widget _buildListItem(String name, String description) {
     return InkWell(
       child: Container(
         width: 150,
         height: 200,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          color: Colors.blueGrey,
+          color: Colors.blue,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -91,23 +55,29 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(15),
           child: Stack(
             children: [
-              Image.asset(
-                imagePath, // Use Image.asset with the local image path
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
               Positioned.fill(
                 child: Container(
                   color: Colors.black.withOpacity(0.3),
                   child: Center(
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          description,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -139,6 +109,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> recommendedQuizzes = quizzes.take(4).toList();
+    List<Map<String, dynamic>> newQuizzes = quizzes.skip(4).take(4).toList();
+    List<Map<String, dynamic>> trendingQuizzes = quizzes.skip(8).toList();
+
     return Scaffold(
       drawer: Sidemenu(),
       appBar: AppBar(
@@ -179,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             onPressed: () {
-              // Handle filter icon click (i didn't know how)
+              // Handle filter icon click
             },
             icon: const Icon(Icons.filter_list),
             color: Colors.black,
@@ -189,71 +163,65 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
-            vertical: 16,
-            horizontal: 8),
+          vertical: 16,
+          horizontal: 8,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildEventSection(),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Recommandés pour vous',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            const Text(
+              'Recommandé pour vous',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(
               height: 150,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: topPicksImagePaths.length,
+                itemCount: recommendedQuizzes.length,
                 itemBuilder: (context, index) {
-                  return _buildListItem('Quiz $index', topPicksImagePaths[index]);
+                  final quiz = recommendedQuizzes[index];
+                  return _buildListItem(quiz['nom'], quiz['description']);
                 },
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Quiz Tendance',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            const SizedBox(height: 16),
+            const Text(
+              'Nouveautés',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(
               height: 150,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: quizTendanceImagePaths.length,
+                itemCount: newQuizzes.length,
                 itemBuilder: (context, index) {
-                  return InkWell(
-                    child: _buildListItem('Quiz $index', quizTendanceImagePaths[index]),
-                  );
+                  final quiz = newQuizzes[index];
+                  return _buildListItem(quiz['nom'], quiz['description']);
                 },
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Nouveautés',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            const SizedBox(height: 16),
+            const Text(
+              'Tendances',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(
               height: 150,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: NouveautesImagePaths.length,
+                itemCount: trendingQuizzes.length,
                 itemBuilder: (context, index) {
-                  return _buildListItem('Quiz $index', NouveautesImagePaths[index]);
+                  final quiz = trendingQuizzes[index];
+                  return _buildListItem(quiz['nom'], quiz['description']);
                 },
               ),
             ),

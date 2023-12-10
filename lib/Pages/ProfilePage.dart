@@ -174,16 +174,16 @@ class ScoreTabContent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildScoreCard("Total de Quiz joués", "1234"),
+                _buildScoreCard("Total de Quiz joués", "0"),
                 const SizedBox(width: 20),
-                _buildScoreCard("Série de victoires", "42"),
+                _buildScoreCard("Série de victoires", "0"),
               ],
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildScoreCard("Accomplissements", "3"),
+                _buildScoreCard("Accomplissements", "0"),
                 const SizedBox(width: 20),
                 _buildScoreCard("Rang", "Gold"),
               ],
