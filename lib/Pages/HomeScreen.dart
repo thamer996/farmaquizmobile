@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       drawer: Sidemenu(),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: const SizedBox(
           height: 40,
           width: 40,
@@ -133,17 +133,17 @@ class _HomeScreenState extends State<HomeScreen> {
         )
             : const Text(''),
         actions: [
-          _isSearchOpen
-              ? IconButton(
-            onPressed: _closeSearch,
-            icon: const Icon(Icons.close),
-            color: Colors.black,
-          )
-              : IconButton(
-            onPressed: _openSearch,
-            icon: const Icon(Icons.search),
-            color: Colors.black,
-          ),
+        _isSearchOpen
+        ? IconButton(
+        onPressed: _closeSearch,
+        icon: const Icon(Icons.close),
+        color: Colors.black,
+      )
+          : IconButton(
+      onPressed: _openSearch,
+      icon: const Icon(Icons.search),
+      color: Colors.black,
+    ),
           IconButton(
             onPressed: () {
               // Handle notification icon click
@@ -161,72 +161,84 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 8,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Recommandé pour vous',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/images/bluebackground.png'),
+                fit: BoxFit.cover,
               ),
             ),
-            SizedBox(
-              height: 150,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: recommendedQuizzes.length,
-                itemBuilder: (context, index) {
-                  final quiz = recommendedQuizzes[index];
-                  return _buildListItem(quiz['nom'], quiz['description']);
-                },
-              ),
+          ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 8,
             ),
-            const SizedBox(height: 16),
-            const Text(
-              'Nouveautés',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Recommandé pour vous',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: recommendedQuizzes.length,
+                    itemBuilder: (context, index) {
+                      final quiz = recommendedQuizzes[index];
+                      return _buildListItem(quiz['nom'], quiz['description']);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Nouveautés',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: newQuizzes.length,
+                    itemBuilder: (context, index) {
+                      final quiz = newQuizzes[index];
+                      return _buildListItem(quiz['nom'], quiz['description']);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Tendances',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: trendingQuizzes.length,
+                    itemBuilder: (context, index) {
+                      final quiz = trendingQuizzes[index];
+                      return _buildListItem(quiz['nom'], quiz['description']);
+                    },
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 150,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: newQuizzes.length,
-                itemBuilder: (context, index) {
-                  final quiz = newQuizzes[index];
-                  return _buildListItem(quiz['nom'], quiz['description']);
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Tendances',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 150,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: trendingQuizzes.length,
-                itemBuilder: (context, index) {
-                  final quiz = trendingQuizzes[index];
-                  return _buildListItem(quiz['nom'], quiz['description']);
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

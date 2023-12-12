@@ -69,57 +69,68 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.blue[900],
-      body: ListView.builder(
-        itemCount: quizCategories.length,
-        itemBuilder: (context, categoryIndex) {
-          final categoryName = quizCategories[categoryIndex]['categoryName'];
-          final categoryDescription = quizCategories[categoryIndex]['categoryDescription'];
-          final quizzes = quizCategories[categoryIndex]['quizzes'];
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/images/bluebackground.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          ListView.builder(
+            itemCount: quizCategories.length,
+            itemBuilder: (context, categoryIndex) {
+              final categoryName = quizCategories[categoryIndex]['categoryName'];
+              final categoryDescription = quizCategories[categoryIndex]['categoryDescription'];
+              final quizzes = quizCategories[categoryIndex]['quizzes'];
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    _navigateToQuizListPage(categoryName, quizzes);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          categoryName,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                    child: GestureDetector(
+                      onTap: () {
+                        _navigateToQuizListPage(categoryName, quizzes);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          categoryDescription,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              categoryName,
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              categoryDescription,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ],
-          );
-        },
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
