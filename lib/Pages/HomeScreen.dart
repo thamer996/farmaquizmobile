@@ -109,8 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> recommendedQuizzes = quizzes.take(4).toList();
-    List<Map<String, dynamic>> newQuizzes = quizzes.skip(4).take(4).toList();
+    List<Map<String, dynamic>> recommendedQuizzes = quizzes.take(2).toList();
+    List<Map<String, dynamic>> newQuizzes = quizzes.skip(2).take(2).toList();
     List<Map<String, dynamic>> trendingQuizzes = quizzes.skip(8).toList();
 
     return Scaffold(

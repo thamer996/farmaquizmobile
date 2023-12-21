@@ -1,10 +1,10 @@
 
+import 'package:app/Pages/Bib.dart';
 import 'package:app/Pages/LeaderboardPage.dart';
 import 'package:app/Pages/SelectQuizPage.dart';
 import 'package:flutter/material.dart';
 import 'package:app/Pages/HomePage.dart';
 import 'package:app/Pages/QuizPage.dart';
-
 import 'Pages/ProfilePage.dart';
 
 void main() {
@@ -21,10 +21,12 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
+        '/Bib': (context) =>  Bib(),
         '/quiz': (context) => const QuizPage(),
         '/page': (context) => SelectQuizPage(),
         '/profil': (context) => const ProfilePage(),
         '/rank' :  (context) =>  LeaderboardPage(),
+
       },
     );
   }

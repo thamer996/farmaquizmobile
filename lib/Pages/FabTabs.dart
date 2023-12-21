@@ -1,3 +1,4 @@
+import 'package:app/Pages/Bib.dart';
 import 'package:app/Pages/HomeScreen.dart';
 import 'package:app/Pages/LeaderboardPage.dart';
 import 'package:app/Pages/ProfilePage.dart';
@@ -51,6 +52,7 @@ class _FabtabsState extends State<Fabtabs> {
 
   final List<Widget> pages = [
     const HomeScreen(),
+    Bib(),
     SelectQuizPage(),
     LeaderboardPage(),
     const ProfilePage(),
@@ -83,9 +85,10 @@ class _FabtabsState extends State<Fabtabs> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               buildTabButton(Icons.home_filled, "Accueil", 0),
-              buildTabButton(Icons.quiz_outlined, "Quiz", 1),
-              buildTabButton(Icons.leaderboard_outlined, "Classement", 2),
-              buildTabButton(Icons.person, "Profil", 3),
+              buildTabButton(Icons.book, "Bib", 1),
+              buildTabButton(Icons.quiz_outlined, "Quiz", 2),
+              buildTabButton(Icons.leaderboard_outlined, "Classement", 3),
+              buildTabButton(Icons.person, "Profil", 4),
             ],
           ),
         ),
