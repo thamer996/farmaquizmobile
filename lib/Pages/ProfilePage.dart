@@ -54,114 +54,120 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
         centerTitle: true,
       ),
-      body: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(35),
-              child: Container(
-                width: double.infinity,
-                height: 185,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage('lib/images/background.png'),
-                    fit: BoxFit.cover,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/images/bluebackground.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(35),
+                child: Container(
+                  width: double.infinity,
+                  height: 185,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      image: AssetImage('lib/images/background.png'),
+                      fit: BoxFit.cover,
                     ),
-                  ],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 16.0),
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage('lib/images/profile_pic.png'),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'User Name',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      '@user_tag',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const EditPage()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff03919B),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: const Text(
-                      'Modifier le profil',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            const TabBar(
-              indicatorColor: Color(0xff03919B),
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              tabs: [
-                Tab(text: "Score"),
-                Tab(text: "Badges"),
-              ],
-            ),
-             Expanded(
-              child: TabBarView(
-
+              const SizedBox(height: 8),
+              Row(
                 children: [
-                  SingleChildScrollView(
-                    child: ScoreTabContent(),
-                  )
-                  ,
-
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('lib/images/profile_pic.png'),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'User Name',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        '@user_tag',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const EditPage()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xff03919B),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text(
+                        'Modifier le profil',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              const TabBar(
+                indicatorColor: Color(0xff03919B),
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.grey,
+                tabs: [
+                  Tab(text: "Score"),
+                  Tab(text: "Badges"),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    SingleChildScrollView(
+                      child: ScoreTabContent(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
 class ScoreTabContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -221,5 +227,3 @@ class ScoreTabContent extends StatelessWidget {
     );
   }
 }
-
-

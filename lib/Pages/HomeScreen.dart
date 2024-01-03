@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 200,
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          color: Colors.blue,
+          color: Colors.cyan[400],
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> recommendedQuizzes = quizzes.take(2).toList();
     List<Map<String, dynamic>> newQuizzes = quizzes.skip(2).take(2).toList();
-    List<Map<String, dynamic>> trendingQuizzes = quizzes.skip(8).toList();
+    List<Map<String, dynamic>> trendingQuizzes = quizzes.skip(4).toList();
 
     return Scaffold(
       drawer: Sidemenu(),

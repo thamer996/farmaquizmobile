@@ -60,9 +60,9 @@ class _BibliothequeState extends State<Bib> {
             left: 20.0,
             right: 20.0,
             child: Text(
-              'PharmaQuiz',
+              'Acceuil en officine',
               style: TextStyle(
-                fontSize: 30.0,
+                fontSize: 34.0,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),

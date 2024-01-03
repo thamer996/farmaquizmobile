@@ -1,4 +1,5 @@
 import 'package:app/Pages/ContactUs.dart';
+import 'package:app/Pages/LoginPage.dart';
 import 'package:flutter/material.dart';
 
 import 'ChangePasswordPage.dart';
@@ -125,6 +126,7 @@ class Settings extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: TextButton(
                 onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
                   // Implémenter la fonctionnalité de déconnexion ici
                 },
                 style: TextButton.styleFrom(
@@ -138,7 +140,7 @@ class Settings extends StatelessWidget {
                   'Déconnexion',
                   style: TextStyle(
                     fontSize: 20,
-                    color: Color(0xff03919B),
+                    color: Color(0xFF26C6DA),
                   ),
                 ),
               ),

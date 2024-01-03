@@ -64,7 +64,7 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
     return Scaffold(
       drawer: Sidemenu(),
       appBar: AppBar(
-        backgroundColor: const Color(0xff03919B),
+        backgroundColor: Colors.cyan[400],
         title: const Text('Les Catégories'),
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -98,7 +98,7 @@ class _SelectQuizPageState extends State<SelectQuizPage> {
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Colors.cyan[400],
                           borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(8.0),

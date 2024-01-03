@@ -164,7 +164,8 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        backgroundColor: const Color(0xff03919B),
+        backgroundColor: const Color(0xFF26C6DA
+        ),
     title: Text('Quiz ${_currentQuestionIndex + 1}/${_quizData.length}'),
     centerTitle: true,
     leading: IconButton(
@@ -175,7 +176,7 @@ class _QuizPageState extends State<QuizPage> {
     ),
     ),
     body: Container(
-    color: Colors.blue[900],
+    color: Colors.cyan[700],
     child: Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(

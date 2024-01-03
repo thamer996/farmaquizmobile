@@ -22,7 +22,7 @@ class QuizListPage extends StatelessWidget {
         Scaffold(
           appBar: AppBar(
             title: Text(categoryName),
-            backgroundColor: const Color(0xff03919B),
+            backgroundColor: Colors.cyan[400],
           ),
           backgroundColor: Colors.transparent, // Set transparent background to allow image to show through
           body: ListView.builder(
@@ -49,7 +49,7 @@ class QuizListPage extends StatelessWidget {
                   child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: Colors.cyan[700],
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(8.0),
